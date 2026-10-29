@@ -19,19 +19,15 @@ class CityCarousel extends StatelessWidget {
     if (cities.isEmpty) {
       return const SizedBox(
         height: 150,
-        child: Center(
-          child: Text('No destination illustrations available.'),
-        ),
+        child: Center(child: Text('No destination illustrations available.')),
       );
     }
 
     return SizedBox(
-      height: 170,
+      height: 200,
       child: ClipRect(
         child: PageView.builder(
-          controller: PageController(
-            viewportFraction: 0.90,
-          ),
+          controller: PageController(viewportFraction: 0.90),
           itemCount: cities.length,
           padEnds: true,
           clipBehavior: Clip.hardEdge,
@@ -40,87 +36,88 @@ class CityCarousel extends StatelessWidget {
             final imageUrl = _absoluteUrl(city.imageUrl);
 
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 4,
-                vertical: 8,
-              ),
-              child: Material(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(24),
-                clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () => onSelected(city.name),
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF172554),
-                          Color(0xFF2563EB),
-                        ],
-                      ),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 14,
-                          offset: Offset(0, 8),
-                          color: Color(0x22000000),
-                        ),
-                      ],
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.30),
+                      blurRadius: 16,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 8),
                     ),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        if (imageUrl != null && imageUrl.isNotEmpty)
-                          _RemoteCityImage(url: imageUrl),
-
-                        const DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.transparent,
-                                Color(0xCC020617),
-                              ],
-                            ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(21),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => onSelected(city.name),
+                      child: Ink(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF172554), Color(0xFF2563EB)],
                           ),
                         ),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            if (imageUrl != null && imageUrl.isNotEmpty)
+                              _RemoteCityImage(url: imageUrl),
 
-                        Positioned(
-                          left: 18,
-                          right: 18,
-                          bottom: 16,
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  city.name,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                            const DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Color(0xCC020617),
+                                  ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.arrow_forward_rounded,
-                                color: Colors.white,
+                            ),
+
+                            Positioned(
+                              left: 18,
+                              right: 18,
+                              bottom: 16,
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      city.name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.arrow_forward_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -152,9 +149,7 @@ String? _absoluteUrl(String? value) {
 }
 
 class _RemoteCityImage extends StatelessWidget {
-  const _RemoteCityImage({
-    required this.url,
-  });
+  const _RemoteCityImage({required this.url});
 
   final String url;
 

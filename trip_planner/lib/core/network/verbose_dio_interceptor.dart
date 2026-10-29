@@ -29,18 +29,18 @@ class VerboseDioInterceptor extends Interceptor {
   }
 
   @override
-  void onError(DioException error, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     AppLogger.error(
-      '✕ ${error.requestOptions.method} ${error.requestOptions.uri}\n'
-      '  type=${error.type}\n'
-      '  status=${error.response?.statusCode}\n'
-      '  message=${error.message}\n'
-      '  response=${_summarize(error.response?.data)}',
-      error: error,
-      stackTrace: error.stackTrace,
+      '✕ ${err.requestOptions.method} ${err.requestOptions.uri}\n'
+      '  type=${err.type}\n'
+      '  status=${err.response?.statusCode}\n'
+      '  message=${err.message}\n'
+      '  response=${_summarize(err.response?.data)}',
+      error: err,
+      stackTrace: err.stackTrace,
       tag: 'HTTP',
     );
-    handler.next(error);
+    handler.next(err);
   }
 
   String _summarize(dynamic value) {
