@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/city.dart';
+import '../../l10n/app_localizations.dart';
 import '../providers/trip_providers.dart';
 import '../widgets/city_carousel.dart';
 import '../widgets/route_result_card.dart';
@@ -11,6 +13,8 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
+
     final connections = ref.watch(connectionsProvider);
     final cities = ref.watch(citiesProvider);
     final availableCities = ref.watch(availableCitiesProvider);
@@ -19,30 +23,36 @@ class HomePage extends ConsumerWidget {
     final route = ref.watch(cheapestRouteProvider);
 
     final carouselCities = cities.value?.isNotEmpty == true
-    ? cities.value!
-    : availableCities
-        .map((name) => City(name: name))
-        .toList(growable: false);
+        ? cities.value!
+        : availableCities
+            .map((name) => City(name: name))
+            .toList(growable: false);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trip Planner'),
+        title: Text(l10n.appTitle),
         actions: [
           IconButton(
-            tooltip: 'Refresh',
+            tooltip: l10n.refresh,
             onPressed: () => ref.invalidate(connectionsProvider),
             icon: const Icon(Icons.refresh_rounded),
           ),
         ],
       ),
       body: connections.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
         error: (error, _) => _ErrorState(
-          message: _friendlyError(error),
+          message: _friendlyError(error, l10n),
+          retryLabel: l10n.retry,
           onRetry: () => ref.invalidate(connectionsProvider),
         ),
         data: (connectionData) {
-          if (connectionData.isEmpty) return const _EmptyState();
+          if (connectionData.isEmpty) {
+            return _EmptyState(message: l10n.apiEmpty);
+          }
+
           return RefreshIndicator(
             onRefresh: () async {
               ref.invalidate(connectionsProvider);
@@ -51,39 +61,81 @@ class HomePage extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
               children: [
-                Text('Where will you fly?', style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800)),
+                Text(
+                  l10n.homeTitle,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 6),
-                Text('Pick a destination or build a route between any two cities.'),
+                Text(l10n.homeSubtitle),
                 const SizedBox(height: 20),
+
                 if (carouselCities.isNotEmpty) ...[
-                  Text('Explore destinations', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+                  Text(
+                    l10n.exploreDestinations,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.w700),
+                  ),
                   const SizedBox(height: 4),
                   CityCarousel(
                     cities: carouselCities,
-                    onSelected: (city) => ref.read(selectedDestinationProvider.notifier).state = city,
+                    onSelected: (city) {
+                      ref
+                          .read(selectedDestinationProvider.notifier)
+                          .state = city;
+                    },
                   ),
                   const SizedBox(height: 12),
                 ],
+
                 _CityDropdown(
-                  label: 'Departure city',
+                  label: l10n.departureCity,
                   value: selectedDeparture,
                   cities: availableCities,
-                  onChanged: (value) => ref.read(selectedDepartureProvider.notifier).state = value,
+                  onChanged: (value) {
+                    ref
+                        .read(selectedDepartureProvider.notifier)
+                        .state = value;
+                  },
                 ),
                 const SizedBox(height: 12),
+
                 _CityDropdown(
-                  label: 'Destination city',
+                  label: l10n.destinationCity,
                   value: selectedDestination,
                   cities: availableCities,
-                  onChanged: (value) => ref.read(selectedDestinationProvider.notifier).state = value,
+                  onChanged: (value) {
+                    ref
+                        .read(selectedDestinationProvider.notifier)
+                        .state = value;
+                  },
                 ),
                 const SizedBox(height: 20),
-                if (selectedDeparture == null || selectedDestination == null)
-                  const _HintState(message: 'Choose both cities to find the cheapest route.')
-                else if (selectedDeparture.trim().toLowerCase() == selectedDestination.trim().toLowerCase())
-                  const _HintState(message: 'Choose two different cities.')
+
+                if (selectedDeparture == null ||
+                    selectedDestination == null)
+                  _HintState(
+                    message: l10n.chooseBothCities,
+                  )
+                else if (selectedDeparture.trim().toLowerCase() ==
+                    selectedDestination.trim().toLowerCase())
+                  _HintState(
+                    message: l10n.chooseDifferentCities,
+                  )
                 else if (route == null)
-                  _NoRouteState(departure: selectedDeparture, destination: selectedDestination)
+                  _NoRouteState(
+                    departure: selectedDeparture,
+                    destination: selectedDestination,
+                    title: l10n.noRouteFound,
+                    description: l10n.noRouteDescription(
+                      selectedDeparture,
+                      selectedDestination,
+                    ),
+                  )
                 else
                   RouteResultCard(route: route),
               ],
@@ -94,17 +146,29 @@ class HomePage extends ConsumerWidget {
     );
   }
 
-  static String _friendlyError(Object error) {
-    final text = error.toString();
-    if (text.contains('SocketException') || text.contains('connection')) {
-      return 'Could not reach the local API. Make sure FastAPI is running on port 8000.';
+  static String _friendlyError(
+    Object error,
+    AppLocalizations l10n,
+  ) {
+    final text = error.toString().toLowerCase();
+
+    if (text.contains('socketexception') ||
+        text.contains('connection')) {
+      return l10n.networkError;
     }
-    return 'Unable to load connections. $text';
+
+    return '${l10n.loadError} $error';
   }
 }
 
 class _CityDropdown extends StatelessWidget {
-  const _CityDropdown({required this.label, required this.value, required this.cities, required this.onChanged});
+  const _CityDropdown({
+    required this.label,
+    required this.value,
+    required this.cities,
+    required this.onChanged,
+  });
+
   final String label;
   final String? value;
   final List<String> cities;
@@ -113,12 +177,20 @@ class _CityDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final safeValue = cities.contains(value) ? value : null;
+
     return DropdownButtonFormField<String>(
       initialValue: safeValue,
       isExpanded: true,
-      decoration: InputDecoration(labelText: label, prefixIcon: const Icon(Icons.flight_takeoff_rounded)),
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: const Icon(Icons.flight_takeoff_rounded),
+      ),
       items: [
-        for (final city in cities) DropdownMenuItem(value: city, child: Text(city)),
+        for (final city in cities)
+          DropdownMenuItem(
+            value: city,
+            child: Text(city),
+          ),
       ],
       onChanged: onChanged,
     );
@@ -126,30 +198,121 @@ class _CityDropdown extends StatelessWidget {
 }
 
 class _ErrorState extends StatelessWidget {
-  const _ErrorState({required this.message, required this.onRetry});
+  const _ErrorState({
+    required this.message,
+    required this.retryLabel,
+    required this.onRetry,
+  });
+
   final String message;
+  final String retryLabel;
   final VoidCallback onRetry;
+
   @override
-  Widget build(BuildContext context) => Center(child: Padding(padding: const EdgeInsets.all(24), child: Column(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.cloud_off_rounded, size: 56), const SizedBox(height: 16), Text(message, textAlign: TextAlign.center), const SizedBox(height: 16), FilledButton.icon(onPressed: onRetry, icon: const Icon(Icons.refresh), label: const Text('Retry'))])));
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.cloud_off_rounded, size: 56),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh),
+              label: Text(retryLabel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState();
+  const _EmptyState({required this.message});
+
+  final String message;
+
   @override
-  Widget build(BuildContext context) => const Center(child: Padding(padding: EdgeInsets.all(24), child: Text('The API returned no connections.')));
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
 }
 
 class _HintState extends StatelessWidget {
   const _HintState({required this.message});
+
   final String message;
+
   @override
-  Widget build(BuildContext context) => Card(child: Padding(padding: const EdgeInsets.all(20), child: Row(children: [const Icon(Icons.info_outline), const SizedBox(width: 12), Expanded(child: Text(message))])));
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Row(
+          children: [
+            const Icon(Icons.info_outline),
+            const SizedBox(width: 12),
+            Expanded(child: Text(message)),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _NoRouteState extends StatelessWidget {
-  const _NoRouteState({required this.departure, required this.destination});
+  const _NoRouteState({
+    required this.departure,
+    required this.destination,
+    required this.title,
+    required this.description,
+  });
+
   final String departure;
   final String destination;
+  final String title;
+  final String description;
+
   @override
-  Widget build(BuildContext context) => Card(child: Padding(padding: const EdgeInsets.all(20), child: Column(children: [const Icon(Icons.route_rounded, size: 42), const SizedBox(height: 10), Text('No route found', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)), const SizedBox(height: 6), Text('There is no available connection path from $departure to $destination.', textAlign: TextAlign.center)])));
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            const Icon(Icons.route_rounded, size: 42),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

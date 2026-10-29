@@ -1,9 +1,6 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:trip_planner/main.dart';
-
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -27,10 +24,7 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 1200),
     );
 
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    );
+    _fadeAnimation = CurvedAnimation(parent: _controller, curve: Curves.easeIn);
 
     _controller.forward();
 
@@ -38,9 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (!mounted) return;
 
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => const TripPlannerApp(),
-        ),
+        MaterialPageRoute(builder: (_) => const TripPlannerApp()),
       );
     });
   }
@@ -59,41 +51,41 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: FadeTransition(
           opacity: _fadeAnimation,
-          child:  Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Image.asset(
-          'assets/images/tui_logo.webp',
-          width: 120,
-          height: 120,
-          fit: BoxFit.contain,
-        ),
-        const Positioned(
-          top: 8,
-          left: -30,
-          child: Text(
-            'with',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Color.fromARGB(255, 157, 168, 182),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Image.asset(
+                    'assets/images/tui_logo.webp',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.contain,
+                  ),
+                  const Positioned(
+                    top: 8,
+                    left: -30,
+                    child: Text(
+                      'with',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 157, 168, 182),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 16),
+              Image.asset(
+                'assets/images/heart_stripes.webp',
+                width: 60,
+                height: 60,
+                fit: BoxFit.contain,
+              ),
+            ],
           ),
-        ),
-      ],
-    ),
-    const SizedBox(width: 16),
-    Image.asset(
-      'assets/images/heart_stripes.webp',
-      width: 60,
-      height: 60,
-      fit: BoxFit.contain,
-    ),
-  ],
-),
         ),
       ),
     );
