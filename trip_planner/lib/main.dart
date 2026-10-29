@@ -24,25 +24,6 @@ void main() {
   );
 }
 
-// class TripPlannerApp extends StatelessWidget {
-//   const TripPlannerApp({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Trip Planner',
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         useMaterial3: true,
-//         colorSchemeSeed: const Color(0xFF2563EB),
-//         scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-//         inputDecorationTheme: const InputDecorationTheme(border: OutlineInputBorder()),
-//         cardTheme: const CardThemeData(margin: EdgeInsets.zero, elevation: 1),
-//       ),
-//       home: const HomePage(),
-//     ); 
-//   }
-// }
 
 
 class TripPlannerApp extends StatelessWidget {

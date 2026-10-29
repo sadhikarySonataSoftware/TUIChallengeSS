@@ -8,19 +8,24 @@ A clean Flutter implementation of the Trip Planner challenge using **Riverpod**,
 lib/
 ├── core/
 │   ├── config/          API configuration via --dart-define
-│   └── network/         Dio provider
+│   ├── logging/         Application logging
+│   ├── network/         Dio provider and HTTP interceptors
+│   └── localization/    Localization configuration and delegates
+│
 ├── data/
-│   ├── datasources/     HTTP implementation
-│   ├── models/          JSON → domain parsing
-│   └── repositories/    Repository implementation
+│   ├── datasources/     HTTP data source implementations
+│   ├── models/          JSON serialization and domain parsing
+│   └── repositories/    Repository implementations
+│
 ├── domain/
 │   ├── entities/        Framework-independent business objects
 │   ├── repositories/    Repository contracts
 │   └── usecases/        Dijkstra cheapest-route algorithm
+│
 └── presentation/
     ├── pages/           Screen composition
     ├── providers/       Riverpod state and dependency wiring
-    └── widgets/         Carousel, map, route result components
+    └── widgets/         Destination carousel, city images, and route map
 ```
 
 ### Key decisions
@@ -77,12 +82,19 @@ For iOS Simulator:
 
 ```bash
 flutter run -d ios --dart-define=API_BASE_URL=http://localhost:8000
+  [iOS simulator ID]
+  # flutter run -d [6789DB69-5626-4C01-A6E3-689820DCDA8A] \
+  # --dart-define=API_BASE_URL=http://localhost:8000 \
 ```
 
 Android emulator:
 
 ```bash
 flutter run -d emulator --dart-define=API_BASE_URL=http://10.0.2.2:8000
+# [Android emulator ID]
+# flutter run -d [emulator-5554] \
+#   --dart-define=API_BASE_URL=http://10.0.2.2:8000 \
+
 ```
 
 Physical device: replace the base URL with the Mac's LAN IP, for example `http://192.168.1.20:8000`.
