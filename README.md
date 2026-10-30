@@ -3,7 +3,7 @@ Flutter Dev Challenge - TUI
 
 
 ```text
-trip_planner_submission/
+root_dir/
 ├── trip_planner/   # Flutter application
 └── api/    # Option A local FastAPI server
 ```
