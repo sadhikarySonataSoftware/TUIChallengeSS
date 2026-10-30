@@ -1,0 +1,23 @@
+{
+  "appTitle": "ভ্রমণ পরিকল্পনাকারী",
+  "homeTitle": "আপনি কোথায় উড়ে যেতে চান?",
+  "homeSubtitle": "একটি গন্তব্য বেছে নিন অথবা যেকোনো দুটি শহরের মধ্যে একটি রুট তৈরি করুন।",
+  "exploreDestinations": "গন্তব্যগুলি ঘুরে দেখুন",
+  "departureCity": "যাত্রার শহর",
+  "destinationCity": "গন্তব্যের শহর",
+  "chooseBothCities": "সবচেয়ে সস্তা রুট খুঁজতে দুটি শহরই বেছে নিন।",
+  "chooseDifferentCities": "দুটি ভিন্ন শহর বেছে নিন।",
+  "noRouteFound": "কোনো রুট পাওয়া যায়নি",
+  "noRouteDescription": "{departure} থেকে {destination} পর্যন্ত কোনো উপলভ্য সংযোগের রুট নেই।",
+  "@noRouteDescription": {
+    "placeholders": {
+      "departure": {},
+      "destination": {}
+    }
+  },
+  "refresh": "রিফ্রেশ করুন",
+  "retry": "আবার চেষ্টা করুন",
+  "apiEmpty": "API থেকে কোনো সংযোগের তথ্য পাওয়া যায়নি।",
+  "loadError": "সংযোগের তথ্য লোড করা যায়নি।",
+  "networkError": "স্থানীয় API-তে সংযোগ করা যায়নি। নিশ্চিত করুন যে FastAPI পোর্ট 8000-এ চালু রয়েছে।"
+}

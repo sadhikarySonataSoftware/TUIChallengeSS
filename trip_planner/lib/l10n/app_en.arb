@@ -1,0 +1,23 @@
+{
+  "appTitle": "Trip Planner",
+  "homeTitle": "Where will you fly?",
+  "homeSubtitle": "Pick a destination or build a route between any two cities.",
+  "exploreDestinations": "Explore destinations",
+  "departureCity": "Departure city",
+  "destinationCity": "Destination city",
+  "chooseBothCities": "Choose both cities to find the cheapest route.",
+  "chooseDifferentCities": "Choose two different cities.",
+  "noRouteFound": "No route found",
+  "noRouteDescription": "There is no available connection path from {departure} to {destination}.",
+  "@noRouteDescription": {
+    "placeholders": {
+      "departure": {},
+      "destination": {}
+    }
+  },
+  "refresh": "Refresh",
+  "retry": "Retry",
+  "apiEmpty": "The API returned no connections.",
+  "loadError": "Unable to load connections.",
+  "networkError": "Could not reach the local API. Make sure FastAPI is running on port 8000."
+}
