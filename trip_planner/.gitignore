@@ -17,3 +17,25 @@ build/
 
 # Generated
 coverage/
+
+
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/.last_build_id
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Android
+android/.gradle/
+android/local.properties
+android/captures/
+android/.cxx/
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+
+# Web
+web/build/

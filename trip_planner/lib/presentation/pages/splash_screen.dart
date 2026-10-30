@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:trip_planner/main.dart';
+
+import 'package:trip_planner/presentation/app/trip_planner_app.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
