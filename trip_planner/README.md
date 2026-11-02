@@ -78,23 +78,22 @@ flutter pub get
 flutter run -d macos --dart-define=API_BASE_URL=http://localhost:8000
 ```
 
-For iOS Simulator:
+iOS Simulator:
 
 ```bash
 flutter run -d ios --dart-define=API_BASE_URL=http://localhost:8000
-  [iOS simulator ID]
-  # flutter run -d [6789DB69-5626-4C01-A6E3-689820DCDA8A] \
-  # --dart-define=API_BASE_URL=http://localhost:8000 \
+  ##[iOS simulator ID]
+    flutter run -d [6789DB69-5626-4C01-A6E3-689820DCDA8A] \
+    --dart-define=API_BASE_URL=http://localhost:8000 \
 ```
 
 Android emulator:
 
 ```bash
 flutter run -d emulator --dart-define=API_BASE_URL=http://10.0.2.2:8000
-# [Android emulator ID]
-# flutter run -d [emulator-5554] \
-#   --dart-define=API_BASE_URL=http://10.0.2.2:8000 \
-
+##[Android emulator ID]
+    flutter run -d [emulator-5554] \
+    --dart-define=API_BASE_URL=http://10.0.2.2:8000 \
 ```
 
 Physical device: replace the base URL with the Mac's LAN IP, for example `http://192.168.1.20:8000`.
