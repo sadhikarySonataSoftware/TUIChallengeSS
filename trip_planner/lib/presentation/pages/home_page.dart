@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:trip_planner/core/utils/currency_utils.dart';
 
 import '../../domain/entities/city.dart';
 import '../../l10n/app_localizations.dart';
@@ -137,7 +138,8 @@ class HomePage extends ConsumerWidget {
                     ),
                   )
                 else
-                  RouteResultCard(route: route),
+                  RouteResultCard(route: route,
+                  currencyCode: getDeviceCurrencyCode(context)),
               ],
             ),
           );

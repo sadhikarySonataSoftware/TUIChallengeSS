@@ -3,6 +3,7 @@ import 'package:trip_planner/presentation/pages/home_page.dart';
 import '../../l10n/app_localizations.dart';
 
 
+
 class TripPlannerApp extends StatelessWidget {
   const TripPlannerApp({super.key});
 
@@ -23,7 +24,6 @@ class TripPlannerApp extends StatelessWidget {
           elevation: 1,
         ),
       ),
-      locale: null,
       localizationsDelegates:
           AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

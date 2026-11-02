@@ -3,11 +3,28 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/connection.dart';
 import '../../domain/entities/route_result.dart';
 import 'route_map.dart';
+import 'package:intl/intl.dart';
 
 class RouteResultCard extends StatelessWidget {
-  const RouteResultCard({required this.route, super.key});
+  const RouteResultCard({
+    required this.route,
+    required this.currencyCode,
+    super.key,
+  });
 
   final RouteResult route;
+  final String currencyCode;
+
+  String _formatPrice(BuildContext context, double value) {
+    final locale = Localizations.localeOf(context).toString();
+
+    final formatter = NumberFormat.currency(
+      locale: locale,
+      name: currencyCode,
+    );
+
+    return formatter.format(value);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +36,36 @@ class RouteResultCard extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Row(
               children: [
-                const CircleAvatar(radius: 24, child: Icon(Icons.savings_outlined)),
+                const CircleAvatar(
+                  radius: 24,
+                  child: Icon(Icons.savings_outlined),
+                ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Cheapest route', style: Theme.of(context).textTheme.labelLarge),
+                      Text(
+                        'Cheapest route',
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
                       const SizedBox(height: 4),
                       Text(
-                        _formatPrice(route.totalPrice),
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                        _formatPrice(context, route.totalPrice),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
                 ),
-                Chip(label: Text('${route.legs.length} ${route.legs.length == 1 ? 'leg' : 'legs'}')),
+                Chip(
+                  label: Text(
+                    '${route.legs.length} '
+                    '${route.legs.length == 1 ? 'leg' : 'legs'}',
+                  ),
+                ),
               ],
             ),
           ),
@@ -46,8 +77,13 @@ class RouteResultCard extends StatelessWidget {
             child: Column(
               children: [
                 for (var i = 0; i < route.legs.length; i++) ...[
-                  _LegTile(index: i + 1, connection: route.legs[i]),
-                  if (i != route.legs.length - 1) const Divider(height: 24),
+                  _LegTile(
+                    index: i + 1,
+                    connection: route.legs[i],
+                    formatPrice: (price) => _formatPrice(context, price),
+                  ),
+                  if (i != route.legs.length - 1)
+                    const Divider(height: 24),
                 ],
               ],
             ),
@@ -58,22 +94,28 @@ class RouteResultCard extends StatelessWidget {
       ],
     );
   }
-
-  static String _formatPrice(double value) => '\$${value.toStringAsFixed(2)}';
 }
 
 class _LegTile extends StatelessWidget {
-  const _LegTile({required this.index, required this.connection});
+  const _LegTile({
+    required this.index,
+    required this.connection,
+    required this.formatPrice,
+  });
 
   final int index;
   final Connection connection;
+  final String Function(double) formatPrice;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(radius: 14, child: Text('$index')),
+        CircleAvatar(
+          radius: 14,
+          child: Text('$index'),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
@@ -84,7 +126,7 @@ class _LegTile extends StatelessWidget {
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 4),
-              Text('Leg price: ${RouteResultCard._formatPrice(connection.price)}'),
+              Text('Leg price: ${formatPrice(connection.price)}'),
             ],
           ),
         ),
@@ -92,3 +134,5 @@ class _LegTile extends StatelessWidget {
     );
   }
 }
+
+
