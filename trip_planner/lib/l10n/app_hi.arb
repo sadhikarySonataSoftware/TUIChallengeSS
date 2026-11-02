@@ -1,0 +1,17 @@
+{
+  "appTitle": "यात्रा योजनाकार",
+  "homeTitle": "आप कहाँ उड़ान भरेंगे?",
+  "homeSubtitle": "एक गंतव्य चुनें या दो शहरों के बीच मार्ग बनाएँ।",
+  "exploreDestinations": "गंतव्य देखें",
+  "departureCity": "प्रस्थान शहर",
+  "destinationCity": "गंतव्य शहर",
+  "chooseBothCities": "सबसे सस्ता मार्ग खोजने के लिए दोनों शहर चुनें।",
+  "chooseDifferentCities": "दो अलग-अलग शहर चुनें।",
+  "noRouteFound": "कोई मार्ग नहीं मिला",
+  "noRouteDescription": "{departure} से {destination} तक कोई उपलब्ध मार्ग नहीं है।",
+  "refresh": "रीफ़्रेश करें",
+  "retry": "पुनः प्रयास करें",
+  "apiEmpty": "API से कोई कनेक्शन नहीं मिला।",
+  "loadError": "कनेक्शन लोड नहीं हो सके।",
+  "networkError": "लोकल API से कनेक्ट नहीं हो सका। जाँचें कि FastAPI पोर्ट 8000 पर चल रहा है।"
+}
